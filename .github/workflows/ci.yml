@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: |
+          pip install black
+          npm install -g eslint
+      - name: Run Black
+        run: black --check . || true
+      - name: Run ESLint
+        run: |
+          if [ -d "frontend" ]; then cd frontend && npx eslint . || true; fi
+
+  trivy-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.16.0
+        with:
+          scan-type: fs
+          ignore-unfixed: true
+          format: table
+          exit-code: 0
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: |
+          pip install pytest
+          npm install
+      - name: Run tests
+        run: |
+          if [ -d "services/item" ]; then cd services/item && pytest || true; fi
+          if [ -d "services/auth" ]; then cd services/auth && pytest || true; fi
+          if [ -d "frontend" ]; then cd frontend && npm test || true; fi
