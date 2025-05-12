@@ -12,11 +12,11 @@
 		"ghcr.io/devcontainers/features/python:1": {},
 		"ghcr.io/devcontainers/features/node:1": {},
 		"ghcr.io/devcontainers/features/go:1": {}
-	},
+	}
 
-	"workspaceFolder": "/workspace",
+	// "workspaceFolder": "/workspace",
 
-	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+	// "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
