@@ -6,7 +6,7 @@
 - Service Discovery & API Gateway: Traefik
 - Observability: Grafana, Prometheus, Loki, Tempo, Promtail, Blackbox Exporter
 - Authentication: JWT, Argon2 (password hashing)
-- Testing: Jest, React Testing Library, Cypress, MSW (frontend); pytest, pytest-django, pytest-asyncio, Factory Boy, Faker (backend); Playwright (E2E)
+- Testing: Jest (unit testing), Playwright (component and acceptance testing), MSW (frontend); pytest, pytest-django, pytest-asyncio, Factory Boy, Faker (backend)
 - Security: Trivy (container scanning), security headers, rate limiting, TLS, network policies
 - CI/CD: GitHub Actions, GitHub Secrets
 - Local Development: Docker Compose (with profiles), devcontainer (Debian-based)
@@ -121,7 +121,7 @@ demo-ecommerce/
   - [x] Set up Next.js project (TypeScript, src/app, public/, config files)
   - [ ] Create basic UI components
   - [ ] Implement basic API integration
-  - [ ] Add unit, component, and E2E tests (Jest, React Testing Library, Playwright)
+  - [ ] Add unit, component, and acceptance tests (Jest, Playwright Component Testing, Playwright + Cucumber)
 6. CI/CD & Security
   - [ ] Set up GitHub Actions workflows (build, test, lint, scan)
   - [ ] Integrate Trivy for container scanning
@@ -172,8 +172,8 @@ Account one-to-many Order; Account compouds Order;
 ### 1. Tools & Libraries
 - **BDD:** [Cucumber.js](https://github.com/cucumber/cucumber-js) (Gherkin syntax for feature files)
 - **TDD/Unit Testing:** [Jest](https://jestjs.io/) (unit tests, coverage)
-- **Component Testing:** [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
-- **E2E Testing:** [Playwright](https://playwright.dev/)
+- **Component Testing:** Playwright Component Testing
+- **Acceptance Testing:** [Playwright](https://playwright.dev/) + Cucumber.js
 - **Mocking API:** [MSW (Mock Service Worker)](https://mswjs.io/)
 - **Linting/Formatting:** ESLint, Prettier
 
@@ -191,7 +191,7 @@ Account one-to-many Order; Account compouds Order;
 
 ### 3. TDD Process
 - For each feature:
-  1. Write failing tests (unit/component/E2E) for the UI and logic.
+  1. Write failing tests (unit/component/acceptance) for the UI and logic.
   2. Implement the minimal code to pass the tests.
   3. Refactor and improve code, keeping tests green.
   4. Use MSW to mock backend API responses for frontend tests.
@@ -210,9 +210,6 @@ frontend/web/
         Item.feature
         Item.test.tsx
   tests/
-    e2e/
-      cart.e2e.ts
-      order.e2e.ts
     support/
   mocks/
     handlers.ts
@@ -223,12 +220,12 @@ frontend/web/
 1. **Write a Gherkin feature** for "Add to Cart".
 2. **Write a failing component test** for Cart UI.
 3. **Implement Cart component** to pass the test.
-4. **Write E2E test** for the full add-to-cart flow.
+4. **Write acceptance test** for the full add-to-cart flow using Playwright + Cucumber.js.
 5. **Mock API** with MSW for isolated frontend testing.
 6. **Repeat** for each feature (Order, Payment, etc).
 
 ### 6. CI Integration
-- Run all tests (unit, component, E2E) in CI pipeline.
+- Run all tests (unit, component, acceptance) in CI pipeline.
 - Enforce coverage and linting thresholds.
 
 ### 7. Optional Tools
