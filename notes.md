@@ -128,3 +128,111 @@ demo-ecommerce/
   - [ ] Configure secrets management
   - [ ] Set up basic testing pipeline
   - [ ] Add pre-commit hooks for linting/formatting
+
+---
+
+DRAFT
+
+Some requirements:
+
+* CRUD Item;
+* CRUD Cart;
+* CRUD Order;
+* CRUD Account;
+* CRUD Payment;
+
+* Order flow:
+  * User accesses the Items Page (This page displays all items);
+  * User can adds one or more items to cart though the "Add to Cart" buttom;
+  * User can open (visualise) the cart through the "View the Cart" button (This will opens the Order Page);
+    * On Order Page, the user can increase or decrease the quantity of each item on the cart;
+    * On Order Page, the user can remove items from the cart;
+    * On Order Page, the user can attach a cupom code to get discounts;
+    * On Order Page, the user can proceed with the order by clicking "Buy" button;
+      * This will send the user to Payment Page;
+      * On Payment Page, the user can select the payment mode (pix, credit cart or invoice);
+      * On Payment Page the user can confirm the payment by clicking "Confirm" buttom;
+    * On Order Page, the user can return to Items Page by clicking "Keep Buying" buttom;
+  * On Items Page, the user can select (click) on an item, this will opens the Item Details Page;
+    * On Item Details Page, the user can visualize all data about such item;
+    * On Item Details Page, the user can add such item to cart by clicking "Add to Cart" buttom;
+    * On Item Details Page, the user can in one sigle operation add such item to cart and opens Order Page by clicking "Buy" buttom;
+
+Some relations:
+
+Item many-to-one Cart; Item compounds Cart;
+Cart one-to-one Order; Cart compounds Order;
+Payment one-to-one Order; Payment compounds Order;
+Account one-to-many Order; Account compouds Order;
+
+---
+
+## BDD + TDD Draft for Frontend Development
+
+### 1. Tools & Libraries
+- **BDD:** [Cucumber.js](https://github.com/cucumber/cucumber-js) (Gherkin syntax for feature files)
+- **TDD/Unit Testing:** [Jest](https://jestjs.io/) (unit tests, coverage)
+- **Component Testing:** [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+- **E2E Testing:** [Playwright](https://playwright.dev/)
+- **Mocking API:** [MSW (Mock Service Worker)](https://mswjs.io/)
+- **Linting/Formatting:** ESLint, Prettier
+
+### 2. BDD Process
+- Write user stories and acceptance criteria in Gherkin (`.feature` files) for each major flow (e.g., Add to Cart, Checkout, Payment).
+- Example (features/cart.feature):
+  ```gherkin
+  Feature: Cart management
+    Scenario: Add item to cart from Items Page
+      Given I am on the Items Page
+      When I click "Add to Cart" on an item
+      Then the item should appear in my cart
+  ```
+- Use [jest-cucumber](https://github.com/bencompton/jest-cucumber) to bind Gherkin steps to test code.
+
+### 3. TDD Process
+- For each feature:
+  1. Write failing tests (unit/component/E2E) for the UI and logic.
+  2. Implement the minimal code to pass the tests.
+  3. Refactor and improve code, keeping tests green.
+  4. Use MSW to mock backend API responses for frontend tests.
+
+### 4. Suggested Directory Structure
+```
+frontend/web/
+  src/
+    app/
+    components/
+    features/
+      cart/
+        Cart.feature
+        Cart.test.tsx
+      item/
+        Item.feature
+        Item.test.tsx
+  tests/
+    e2e/
+      cart.e2e.ts
+      order.e2e.ts
+    support/
+  mocks/
+    handlers.ts
+    server.ts
+```
+
+### 5. Example Workflow
+1. **Write a Gherkin feature** for "Add to Cart".
+2. **Write a failing component test** for Cart UI.
+3. **Implement Cart component** to pass the test.
+4. **Write E2E test** for the full add-to-cart flow.
+5. **Mock API** with MSW for isolated frontend testing.
+6. **Repeat** for each feature (Order, Payment, etc).
+
+### 6. CI Integration
+- Run all tests (unit, component, E2E) in CI pipeline.
+- Enforce coverage and linting thresholds.
+
+### 7. Optional Tools
+- [Storybook](https://storybook.js.org/) for UI component development and visual BDD.
+- [Allure](https://docs.qameta.io/allure/) for test reporting.
+
+---
